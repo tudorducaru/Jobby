@@ -257,36 +257,45 @@ public class AddAJob extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         progressBar.bringToFront();
 
-        // generate a random id
-        String randomID = String.valueOf(java.util.UUID.randomUUID());
+        // if bitmap is null, don't load image
+        if(bitmap == null){
 
-        // get a storage reference
-        final StorageReference storageRef = FirebaseStorage.getInstance()
-                .getReference("job_pics")
-                .child(randomID);
+            // add job info without url
+            addJobInfo("");
 
-        // convert the bitmap to byte array
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] byteData = baos.toByteArray();
+        } else {
 
-        // UPLOAD IMAGE
-        final UploadTask uploadTask = storageRef.putBytes(byteData);
-        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+            // generate a random id
+            String randomID = String.valueOf(java.util.UUID.randomUUID());
 
-                // get the url of the profile pic
-                storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
+            // get a storage reference
+            final StorageReference storageRef = FirebaseStorage.getInstance()
+                    .getReference("job_pics")
+                    .child(randomID);
 
-                        // add the job info as well
-                        addJobInfo(uri.toString());
-                    }
-                });
-            }
-        });
+            // convert the bitmap to byte array
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] byteData = baos.toByteArray();
+
+            // UPLOAD IMAGE
+            final UploadTask uploadTask = storageRef.putBytes(byteData);
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    // get the url of the profile pic
+                    storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+
+                            // add the job info as well
+                            addJobInfo(uri.toString());
+                        }
+                    });
+                }
+            });
+        }
     }
 
     // helper method to check permissions for taking photo
