@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- These are the options displayed in the gender drop-down Spinner -->
+    <string-array name="job_category">
+        <item>Sanitary</item>
+        <item>Joinery</item>
+        <item>Engineering</item>
+        <item>Appliance</item>
+        <item>IT/Software</item>
+    </string-array>
+</resources>

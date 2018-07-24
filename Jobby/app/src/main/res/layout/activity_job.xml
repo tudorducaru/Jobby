@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="tudor.example.jobby.activities.JobActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout style="@style/jobActivityGroups">
+
+            <TextView
+                style="@style/jobActivityLabels"
+                android:text="Title" />
+
+            <TextView
+                android:id="@+id/jobTitleTextView"
+                style="@style/jobActivityContentFields"
+                android:text="Am nevoie de reparatia unei tevi" />
+
+        </LinearLayout>
+
+        <LinearLayout style="@style/jobActivityGroups">
+
+            <TextView
+                style="@style/jobActivityLabels"
+                android:text="Address" />
+
+            <TextView
+                android:id="@+id/jobAddressTextView"
+                style="@style/jobActivityContentFields"
+                android:text="Address" />
+
+        </LinearLayout>
+
+        <LinearLayout style="@style/jobActivityGroups">
+
+            <TextView
+                style="@style/jobActivityLabels"
+                android:text="Description" />
+
+            <TextView
+                android:id="@+id/jobDescriptionTextView"
+                style="@style/jobActivityContentFields"
+                android:text="Description" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/jobActivityImageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:padding="16dp" />
+
+        <LinearLayout
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:backgroundTint="#43a047"
+                android:id="@+id/jobCallButton"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="call" />
+
+            <Button
+                android:backgroundTint="@color/colorSecondary"
+                android:id="@+id/jobPlaceBidButton"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="place bid" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/job_bid_label_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Bids"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ListView
+            android:id="@+id/jobBidsListView"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+
+</ScrollView>
