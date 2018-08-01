@@ -69,7 +69,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Jobs completed: "
+                        android:text="Lucrari executate : "
                         android:textSize="18sp" />
 
                     <TextView
@@ -102,7 +102,7 @@
                     android:id="@+id/profileAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Address"
+                    android:hint="Adresa"
                     android:inputType="textCapSentences" />
 
             </android.support.design.widget.TextInputLayout>
@@ -115,17 +115,18 @@
                     android:id="@+id/profilePhoneNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Phone number"
+                    android:hint="Numar de telefon"
                     android:inputType="phone" />
 
             </android.support.design.widget.TextInputLayout>
 
             <Button
+                android:backgroundTint="@color/colorAccent"
                 android:id="@+id/profileButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Update information" />
+                android:text="actualizare informatii" />
 
             <Button
                 android:layout_marginTop="4dp"
@@ -133,7 +134,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/holo_red_light"
-                android:text="sign out" />
+                android:text="delogare" />
 
         </LinearLayout>
 

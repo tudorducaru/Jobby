@@ -3,8 +3,10 @@ package tudor.example.jobby.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -46,6 +48,13 @@ public class BidderProfile extends AppCompatActivity {
     private double bidderRating;
     private long bidderRatingCount;
 
+    // variable that stores the key of the job accepted
+    private String jobAccepted;
+
+    // the buttons
+    private Button acceptBidButton;
+    private Button rateButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +71,11 @@ public class BidderProfile extends AppCompatActivity {
         // get the bidder's id and name
         bidderId = intent.getStringExtra("id");
         bidderName = intent.getStringExtra("name");
+
+        // get the job key
+        jobAccepted = intent.getStringExtra("key");
+
+        getJobStatus();
 
         // find the text views
         ratingTextView = (TextView) findViewById(R.id.bidderRatingTextView);
@@ -101,8 +115,8 @@ public class BidderProfile extends AppCompatActivity {
                             .into(profilePic);
                 }
                 ratingTextView.setText("Rating : ⭐" + bidderRating);
-                ratingCountTextView.setText("Rating count : " + bidderRatingCount);
-                jobsCompletedTextView.setText("Jobs completed : " + bidderJobsCompleted);
+                ratingCountTextView.setText("Nr. de rating-uri : " + bidderRatingCount);
+                jobsCompletedTextView.setText("Lucrari executate : " + bidderJobsCompleted);
 
             }
 
@@ -117,7 +131,7 @@ public class BidderProfile extends AppCompatActivity {
         ratingBar.setNumStars(5);
 
         // get the rate button
-        Button rateButton = (Button) findViewById(R.id.rateButton);
+        rateButton = (Button) findViewById(R.id.rateButton);
         rateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -138,10 +152,12 @@ public class BidderProfile extends AppCompatActivity {
         });
 
         // get the accept bid button
-        Button acceptBidButton = (Button) findViewById(R.id.acceptBidButton);
+        acceptBidButton = (Button) findViewById(R.id.acceptBidButton);
         acceptBidButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                updateJobStatus();
 
                 // add 1 to the jobs completed
                 bidderJobsCompleted = bidderJobsCompleted + 1;
@@ -166,5 +182,51 @@ public class BidderProfile extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    // helper function to update the accepted field of the job
+    private void updateJobStatus(){
+
+        // get a firebase database instance
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        // get a reference to the job
+        DatabaseReference jobRef = database.getReference("jobs").child(jobAccepted).child("mAccepted");
+
+        // update the reference
+        jobRef.setValue(1);
+
+    }
+
+    // helper function to get the job status
+    private void getJobStatus(){
+
+        // get a firebase database instance
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        // get a reference to the job
+        DatabaseReference jobRef = database.getReference("jobs").child(jobAccepted).child("mAccepted");
+
+        // query the database
+        jobRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                long status = (long) dataSnapshot.getValue();
+
+                if(status == 1){
+
+                    // job accepted, invalidate the button
+                    acceptBidButton.setVisibility(View.GONE);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

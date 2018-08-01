@@ -310,12 +310,8 @@ public class ProfileFragment extends Fragment {
                     addressEditText.setText(currentUser.getmAddress());
 
                     // set the phone number
-                    int phoneNumber = currentUser.getmPhoneNumber();
-                    if(phoneNumber != 0){
-                        phoneNumberEditText.setText(String.valueOf(currentUser.getmPhoneNumber()));
-                    } else {
-                        phoneNumberEditText.setText("");
-                    }
+                    String phoneNumber = currentUser.getmPhoneNumber();
+                    phoneNumberEditText.setText(phoneNumber);
                 }
 
             }
@@ -333,7 +329,7 @@ public class ProfileFragment extends Fragment {
 
         // get the text from the edit text
         String address = addressEditText.getText().toString();
-        int phoneNumber = Integer.parseInt(phoneNumberEditText.getText().toString());
+        String phoneNumber = phoneNumberEditText.getText().toString();
 
         // update the database
         currentUserRef.child("mAddress").setValue(address);

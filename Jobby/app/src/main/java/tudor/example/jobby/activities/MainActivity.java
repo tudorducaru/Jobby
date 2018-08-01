@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,6 +33,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.Arrays;
 
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if(resultCode == RESULT_CANCELED){
+
                 finish();
             } else {
                 // reference to "users" node
@@ -96,16 +100,30 @@ public class MainActivity extends AppCompatActivity {
                             String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
                             // create a user object
-                            User currentUserProfile = new User(0, 0, 0, "", currentUserEmail, "", 0);
+                            final User currentUserProfile = new User(0, 0, 0, "", currentUserEmail, "", "", "");
 
-                            // add the user in the database
-                            currentUserReference.setValue(currentUserProfile).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            // get the firebase id
+                            FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    // initialize the layout
-                                    initializeLayout();
+                                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+
+                                    String token = task.getResult().getToken();
+
+                                    // set the token
+                                    currentUserProfile.setmToken(token);
+
+                                    // add the user in the database
+                                    currentUserReference.setValue(currentUserProfile).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            // initialize the layout
+                                            initializeLayout();
+                                        }
+                                    });
                                 }
                             });
+
+
                         } else {
 
                             // initialize the layout
@@ -142,6 +160,9 @@ public class MainActivity extends AppCompatActivity {
             // initialize layout
             initializeLayout();
         } else {
+
+            Log.i("start", "login screen");
+
             // start the sign in flow
             startLoginScreen();
         }
@@ -149,17 +170,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startLoginScreen(){
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setIsSmartLockEnabled(false)
-                        .setLogo(R.drawable.picture)
-                        .setTheme(R.style.AppTheme)
-                        .setAvailableProviders(
-                                Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build(),
-                                        new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build()))
-                        .build(),
-                RC_SIGN_IN);
+
+        // create an intent
+        Intent firebaseIntent = AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setIsSmartLockEnabled(false)
+                .setLogo(R.drawable.logo)
+                .setTheme(R.style.AppTheme)
+                .setAvailableProviders(
+                        Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build(),
+                                new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build()))
+                .build();
+
+        startActivityForResult(firebaseIntent, RC_SIGN_IN);
     }
 
     public void initializeLayout(){
@@ -176,6 +199,9 @@ public class MainActivity extends AppCompatActivity {
 
         // get the navigation view
         navigationView = findViewById(R.id.navigation_view);
+
+        // display original color of icon
+        //navigationView.setItemIconTintList(null);
 
         // get and set the nav header's textView
         View navigationHeader = navigationView.getHeaderView(0);
@@ -199,55 +225,68 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_container, new JobFragment());
         fragmentTransaction.commit();
-        getSupportActionBar().setTitle("All jobs");
+        getSupportActionBar().setTitle("Toate anunturile");
 
         // put a listener on the navigation view
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
                 switch(item.getItemId()){
-                    case R.id.drawerJobs :
+                    case R.id.drawerAllJobs :
                         fragmentTransaction.replace(R.id.main_container, new JobFragment()).commit();
-                        getSupportActionBar().setTitle("All jobs");
+                        getSupportActionBar().setTitle("Toate anunturile");
                         JobFragment.categoryIndex = -1;
                         break;
-                    case R.id.drawerRequests :
+                    case R.id.drawerAnunturileMele :
                         fragmentTransaction.replace(R.id.main_container, new RequestFragment()).commit();
-                        getSupportActionBar().setTitle("My Requests");
+                        getSupportActionBar().setTitle("Anunturile mele");
                         break;
                     case R.id.drawerProfile :
                         fragmentTransaction.replace(R.id.main_container, new ProfileFragment()).commit();
-                        getSupportActionBar().setTitle("Settings");
+                        getSupportActionBar().setTitle("Setari");
                         break;
-                    case R.id.sanitaryMenu :
+                    case R.id.drawer_it_menu :
                         fragmentTransaction.replace(R.id.main_container, new JobFragment()).commit();
-                        getSupportActionBar().setTitle("Sanitary jobs");
+                        getSupportActionBar().setTitle("IT-Software");
                         JobFragment.categoryIndex = 0;
                         break;
-                    case R.id.joineryMenu :
+                    case R.id.drawer_electrocasnice :
                         fragmentTransaction.replace(R.id.main_container, new JobFragment()).commit();
-                        getSupportActionBar().setTitle("Joinery jobs");
+                        getSupportActionBar().setTitle("Electrocasnice");
                         JobFragment.categoryIndex = 1;
                         break;
-                    case R.id.enginneringMenu :
+                    case R.id.drawer_constructii :
                         fragmentTransaction.replace(R.id.main_container, new JobFragment()).commit();
-                        getSupportActionBar().setTitle("Engineering jobs");
+                        getSupportActionBar().setTitle("Meseriasi-Constructori");
                         JobFragment.categoryIndex = 2;
                         break;
-                    case R.id.applianceMenu :
+                    case R.id.drawer_cursuri :
                         fragmentTransaction.replace(R.id.main_container, new JobFragment()).commit();
-                        getSupportActionBar().setTitle("Appliance jobs");
+                        getSupportActionBar().setTitle("Cursuri-Meditatii");
                         JobFragment.categoryIndex = 3;
                         break;
-                    case R.id.itsoftMenu :
+                    case R.id.drawer_curatenie :
                         fragmentTransaction.replace(R.id.main_container, new JobFragment()).commit();
-                        getSupportActionBar().setTitle("IT/Software jobs");
+                        getSupportActionBar().setTitle("Curatenie-Servicii menaj");
                         JobFragment.categoryIndex = 4;
                         break;
-
+                    case R.id.drawer_curierat :
+                        fragmentTransaction.replace(R.id.main_container, new JobFragment()).commit();
+                        getSupportActionBar().setTitle("Curierat-Servicii auto");
+                        JobFragment.categoryIndex = 5;
+                        break;
+                    case R.id.drawer_babysitter :
+                        fragmentTransaction.replace(R.id.main_container, new JobFragment()).commit();
+                        getSupportActionBar().setTitle("Bone-Babysitter");
+                        JobFragment.categoryIndex = 6;
+                        break;
+                    case R.id.drawer_animale :
+                        fragmentTransaction.replace(R.id.main_container, new JobFragment()).commit();
+                        getSupportActionBar().setTitle("Animale de companie");
+                        JobFragment.categoryIndex = 7;
+                        break;
                 }
 
                 mDrawerLayout.closeDrawer(GravityCompat.START);

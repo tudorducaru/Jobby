@@ -2,54 +2,81 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:icon="@drawable/auction"
-        android:id="@+id/drawerJobs"
-        android:title="All jobs"
-        app:showAsAction="never" />
+    <group android:id="@+id/group1">
 
-    <item
-        android:icon="@drawable/briefcase"
-        android:id="@+id/drawerRequests"
-        android:title="My Requests"
-        app:showAsAction="never" />
+        <item
+            android:id="@+id/drawerAllJobs"
+            android:icon="@drawable/drawer_toateanunturile"
+            android:title="Toate anunturile"
+            app:showAsAction="never" />
 
-    <item
-        android:id="@+id/sanitaryMenu"
-        android:title="Sanitary"
-        android:icon="@drawable/sanitary"
-        app:showAsAction="never"/>
+        <item
+            android:id="@+id/drawerAnunturileMele"
+            android:icon="@drawable/drawer_anunturile_mele"
+            android:title="Anunturile mele"
+            app:showAsAction="never" />
 
-    <item
-        android:id="@+id/joineryMenu"
-        android:title="Joinery"
-        android:icon="@drawable/joinery"
-        app:showAsAction="never"/>
+    </group>
 
-    <item
-        android:id="@+id/enginneringMenu"
-        android:title="Engineering"
-        android:icon="@drawable/engineering"
-        app:showAsAction="never"/>
+    <group android:id="@+id/group2">
 
-    <item
-        android:id="@+id/applianceMenu"
-        android:title="Appliance"
-        android:icon="@drawable/appliance"
-        app:showAsAction="never"/>
+        <item
+            android:id="@+id/drawer_it_menu"
+            android:icon="@drawable/drawer_itsoftware"
+            android:title="IT-Software"
+            app:showAsAction="never" />
 
-    <item
-        android:id="@+id/itsoftMenu"
-        android:title="IT/Software"
-        android:icon="@drawable/itsoftware"
-        app:showAsAction="never"/>
+        <item
+            android:id="@+id/drawer_electrocasnice"
+            android:icon="@drawable/drawer_electrocasnice"
+            android:title="Electrocasnice"
+            app:showAsAction="never" />
 
+        <item
+            android:id="@+id/drawer_constructii"
+            android:icon="@drawable/drawer_constructii"
+            android:title="Meseriasi-Constructori"
+            app:showAsAction="never" />
 
+        <item
+            android:id="@+id/drawer_cursuri"
+            android:icon="@drawable/drawer_cursuri"
+            android:title="Cursuri-Meditatii"
+            app:showAsAction="never" />
 
-    <item
-        android:icon="@drawable/settings"
-        android:id="@+id/drawerProfile"
-        android:title="Settings"
-        app:showAsAction="never" />
+        <item
+            android:id="@+id/drawer_curatenie"
+            android:icon="@drawable/drawer_curatenie"
+            android:title="Curatenie-Servicii menaj"
+            app:showAsAction="never" />
 
+        <item
+            android:id="@+id/drawer_curierat"
+            android:icon="@drawable/drawer_livrari"
+            android:title="Curierat-Servicii auto"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/drawer_babysitter"
+            android:icon="@drawable/drawer_babysitter"
+            android:title="Bone-Babysitter"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/drawer_animale"
+            android:icon="@drawable/drawer_animale"
+            android:title="Animale de companie"
+            app:showAsAction="never" />
+
+    </group>
+
+    <group android:id="@+id/group3">
+
+        <item
+            android:id="@+id/drawerProfile"
+            android:icon="@drawable/drawer_setari"
+            android:title="Settings"
+            app:showAsAction="never" />
+
+    </group>
 </menu>

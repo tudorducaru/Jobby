@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import tudor.example.jobby.objects.Job;
 import tudor.example.jobby.objects.User;
@@ -84,10 +85,18 @@ public class RequestFragment extends Fragment {
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         Job currentJob = child.getValue(Job.class);
                         if (currentJob.getmUserID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+
+                            // add the job
                             requestList.add(currentJob);
                             pushID.add(child.getKey());
                         }
                     }
+
+                    // reverse the arrays
+                    Collections.reverse(requestList);
+                    Collections.reverse(pushID);
+
+                    // notify the adapter
                     adapter.notifyDataSetChanged();
                 }
 
@@ -139,10 +148,10 @@ public class RequestFragment extends Fragment {
 
                     // get the address and the phone number
                     String address = currentUser.getmAddress();
-                    int phoneNumber = currentUser.getmPhoneNumber();
+                    String phoneNumber = currentUser.getmPhoneNumber();
 
                     // check that data was inserted
-                    if(address.equals("") || phoneNumber == 0){
+                    if(address.equals("") || phoneNumber.equals("")){
 
                         // create an alert dialog
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());

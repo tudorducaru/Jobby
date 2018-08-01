@@ -15,17 +15,34 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity">
+        <activity
+            android:name=".activities.MainActivity"
+            android:launchMode="standard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="com.google.firebase.messaging.default_notification_icon"
+                android:resource="@android:drawable/ic_delete" />
+            <meta-data
+                android:name="com.google.firebase.messaging.default_notification_color"
+                android:resource="@color/colorAccent" />
         </activity>
         <activity android:name=".activities.AddAJob" />
-        <activity android:name=".activities.JobActivity" />
+        <activity android:name=".activities.JobActivity" >
+            <meta-data android:name="com.inthecheesefactory.lab.glidepicasso.GlideConfiguration"
+                android:value="GlideModule"/>
+        </activity>
         <activity android:name=".activities.MyBids" />
-        <activity android:name=".activities.BidderProfile"></activity>
+        <service
+            android:name="tudor.example.jobby.utilities.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <activity android:name=".activities.BidderProfile"/>
     </application>
 
 </manifest>

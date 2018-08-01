@@ -40,6 +40,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -55,14 +56,8 @@ public class AddAJob extends AppCompatActivity {
     // code for the intent
     private static final int TAKE_PICTURE = 1;
 
-    // the image file
-    File photo;
-
     // instance of the toolbar
     private Toolbar mToolbar;
-
-    // uri of the image
-    private Uri imageUri;
 
     // EditTexts
     private EditText titleEditText;
@@ -83,14 +78,20 @@ public class AddAJob extends AppCompatActivity {
     // database reference
     private DatabaseReference mJobsReference;
 
-    // bitmap of the job image
-    private Bitmap bitmap = null;
-
     // job's category
     private String category = "Sanitary";
 
     // the spinner
     private Spinner categorySpinner;
+
+    // name of the picture file
+    private String filename;
+
+    // picture uri
+    private Uri imageUri;
+
+    // file instance of the image
+    private File photo;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -115,26 +116,18 @@ public class AddAJob extends AppCompatActivity {
             // check if the request was successful
             if(resultCode == Activity.RESULT_OK){
 
-                // check if the intent data is null
-                if(data.getExtras() != null){
+                // set the image in the image view
+                loadedPictureImageView.setImageURI(imageUri);
 
-                    // create a bitmap
-                    bitmap = (Bitmap) data.getExtras().get("data");
+                // hide the add a picture image view
+                addPictureImageView.setVisibility(View.GONE);
 
-                    // set the bitmap in the image view
-                    loadedPictureImageView.setImageBitmap(bitmap);
-
-                    // hide the add a picture image view
-                    addPictureImageView.setVisibility(View.GONE);
-
-                    // set the listener on the loaded picture
-                    loadedPictureImageView.setOnClickListener(new View.OnClickListener() {
+                // set the listener on the loaded picture
+                loadedPictureImageView.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
-                            checkPermissions();
+                        public void onClick(View v) { checkPermissions();
                         }
                     });
-                }
             }
         }
 
@@ -191,7 +184,7 @@ public class AddAJob extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         // there is only one option, add job menu item
-        addJob(bitmap);
+        addJob();
 
         return super.onOptionsItemSelected(item);
     }
@@ -251,14 +244,14 @@ public class AddAJob extends AppCompatActivity {
     }
 
     // helper function to add the job image to the database
-    private void addJob(Bitmap bitmap){
+    private void addJob(){
 
         // load started, so start the progress bar
         progressBar.setVisibility(View.VISIBLE);
         progressBar.bringToFront();
 
         // if bitmap is null, don't load image
-        if(bitmap == null){
+        if(loadedPictureImageView.getVisibility() == View.INVISIBLE){
 
             // add job info without url
             addJobInfo("");
@@ -273,13 +266,8 @@ public class AddAJob extends AppCompatActivity {
                     .getReference("job_pics")
                     .child(randomID);
 
-            // convert the bitmap to byte array
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] byteData = baos.toByteArray();
-
             // UPLOAD IMAGE
-            final UploadTask uploadTask = storageRef.putBytes(byteData);
+            final UploadTask uploadTask = storageRef.putFile(imageUri);
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -323,6 +311,17 @@ public class AddAJob extends AppCompatActivity {
         // create an intent
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
+        // set a filename
+        filename = String.valueOf(java.util.UUID.randomUUID());
+
+        // create a photo object
+        photo = new File(Environment.getExternalStorageDirectory(), filename);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                Uri.fromFile(photo));
+
+        // get the uri of the photo
+        imageUri = Uri.fromFile(photo);
+
         // start activity for result
         startActivityForResult(intent, TAKE_PICTURE);
     }
@@ -331,7 +330,7 @@ public class AddAJob extends AppCompatActivity {
     private void setupSpinner(){
         // Create adapter for spinner. The list options are from the String array it will use
         // the spinner will use the default layout
-        ArrayAdapter categorySpinnerAdapter = ArrayAdapter.createFromResource(this,
+        final ArrayAdapter categorySpinnerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.job_category, android.R.layout.simple_spinner_item);
 
         // Specify dropdown layout style - simple list view with 1 item per line
@@ -347,16 +346,22 @@ public class AddAJob extends AppCompatActivity {
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
 
-                    if (selection.equals("Sanitary")) {
-                        category = "Sanitary";
-                    } else if (selection.equals("Joinery")) {
-                        category = "Joinery";
-                    } else if (selection.equals("Engineering")){
-                        category = "Engineering";
-                    } else if (selection.equals("Appliance")){
-                        category = "Appliance";
-                    } else {
-                        category = "IT/Software";
+                    if (selection.equals("IT-Software")) {
+                        category = "IT-Software";
+                    } else if (selection.equals("Electrocasnice")) {
+                        category = "Electrocasnice";
+                    } else if (selection.equals("Meseriasi-Constructori")){
+                        category = "Meseriasi-Constructori";
+                    } else if (selection.equals("Cursuri-Meditatii")){
+                        category = "Cursuri-Meditatii";
+                    } else if (selection.equals("Curatenie-Servicii menaj")){
+                        category = "Curatenie-Servicii menaj";
+                    } else if (selection.equals("Curierat-Servicii auto")){
+                        category = "Curierat-Servicii auto";
+                    } else if (selection.equals("Bone-Babysitter")){
+                        category = "Bone-Babysitter";
+                    } else if (selection.equals("Animale de companie")){
+                        category = "Animale de companie";
                     }
                 }
             }

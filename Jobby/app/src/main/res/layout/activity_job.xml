@@ -17,11 +17,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <TextView
+            android:id="@+id/job_accepted_text_view"
+            android:visibility="gone"
+            android:layout_marginTop="16dp"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:layout_gravity="center_horizontal"
+            android:text="Un specialist a fost deja angajat!"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <LinearLayout style="@style/jobActivityGroups">
 
             <TextView
                 style="@style/jobActivityLabels"
-                android:text="Title" />
+                android:text="Titlu" />
 
             <TextView
                 android:id="@+id/jobTitleTextView"
@@ -34,7 +45,7 @@
 
             <TextView
                 style="@style/jobActivityLabels"
-                android:text="Address" />
+                android:text="Adresa" />
 
             <TextView
                 android:id="@+id/jobAddressTextView"
@@ -47,7 +58,7 @@
 
             <TextView
                 style="@style/jobActivityLabels"
-                android:text="Description" />
+                android:text="Descriere" />
 
             <TextView
                 android:id="@+id/jobDescriptionTextView"
@@ -56,12 +67,28 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/jobActivityImageView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:padding="16dp" />
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:visibility="gone"
+                android:id="@+id/jobActivityProgressBar"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/jobActivityImageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:padding="16dp" />
+
+
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_marginLeft="8dp"
@@ -78,15 +105,15 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="call" />
+                android:text="suna" />
 
             <Button
-                android:backgroundTint="@color/colorSecondary"
+                android:backgroundTint="@color/colorAccent"
                 android:id="@+id/jobPlaceBidButton"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="place bid" />
+                android:text="adauga oferta" />
 
         </LinearLayout>
 
@@ -96,7 +123,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:text="Bids"
+            android:text="Licitatie"
             android:textSize="18sp"
             android:textStyle="bold" />
 

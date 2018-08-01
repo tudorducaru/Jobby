@@ -70,5 +70,4 @@ public class Job {
     public String getmCategory(){
         return mCategory;
     }
-
 }

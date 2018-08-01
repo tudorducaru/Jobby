@@ -29,12 +29,12 @@
 
         <EditText
             android:id="@+id/addAJobTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:background="@android:color/transparent"
-            android:hint="Title"
+            android:hint="Titlu"
             android:inputType="textCapSentences"
             android:textSize="18sp" />
 
@@ -44,8 +44,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
-            android:alpha="0.4"
-            android:background="@android:color/black" />
+            android:alpha="1"
+            android:background="@color/colorAccent" />
 
         <LinearLayout
             android:layout_marginLeft="16dp"
@@ -58,7 +58,7 @@
                 android:textColor="#808080"
                 android:textSize="18sp"
                 android:layout_gravity="center_vertical"
-                android:text="Category "
+                android:text="Categorie "
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -76,8 +76,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
-            android:alpha="0.4"
-            android:background="@android:color/black" />
+            android:alpha="1"
+            android:background="@color/colorAccent" />
 
         <EditText
             android:layout_marginTop="16dp"
@@ -88,7 +88,7 @@
             android:layout_marginRight="16dp"
             android:background="@android:color/transparent"
             android:gravity="top|left"
-            android:hint="Description"
+            android:hint="Descriere"
             android:inputType="textMultiLine|textCapSentences"
             android:lines="8"
             android:maxLines="10"

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,9 +15,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,6 +44,7 @@ public class JobActivity extends AppCompatActivity {
     private TextView descriptionTextView;
     private Button callButton;
     private Button placeBidButton;
+    private ProgressBar imageViewProgressBar;
 
     // dialog's views
     private EditText dialogBidName;
@@ -52,6 +58,9 @@ public class JobActivity extends AppCompatActivity {
 
     // the Toolbar
     private Toolbar mToolbar;
+
+    // status of the job
+    private int accepted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +87,7 @@ public class JobActivity extends AppCompatActivity {
         callButton = (Button) findViewById(R.id.jobCallButton);
         placeBidButton = (Button) findViewById(R.id.jobPlaceBidButton);
         bidsLabelTextView = findViewById(R.id.job_bid_label_text_view);
+        imageViewProgressBar = findViewById(R.id.jobActivityProgressBar);
 
         // get a database reference
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("jobs");
@@ -92,12 +102,52 @@ public class JobActivity extends AppCompatActivity {
                     descriptionTextView.setText(currentJob.getmDescription());
                     phoneNumber.add(currentJob.getmPhoneNumber());
 
+                    accepted = currentJob.getmAccepted();
+
+                    Log.i("acceptedstatus", String.valueOf(accepted));
+
+                    if(accepted == 1) {
+
+                        // show the notification text view
+                        TextView jobAcceptedTextView = findViewById(R.id.job_accepted_text_view);
+                        jobAcceptedTextView.setVisibility(View.VISIBLE);
+
+                        // invalidate the buttons if the job was accepted
+                        callButton.setVisibility(View.GONE);
+                        placeBidButton.setVisibility(View.GONE);
+                    }
+
                     ImageView imageView = (ImageView) findViewById(R.id.jobActivityImageView);
                     String downloadUrl = currentJob.getmImageUrl();
-                    Glide.with(getApplicationContext())
-                            .load(downloadUrl)
-                            .into(imageView);
+                    if(!downloadUrl.equals("")) {
 
+                        // display the progress bar
+                        imageViewProgressBar.setVisibility(View.VISIBLE);
+
+                        // show the image view
+                        imageView.setVisibility(View.VISIBLE);
+
+                        // load the image
+                        Glide.with(getApplicationContext())
+                                .load(downloadUrl)
+                                .listener(new RequestListener<String, GlideDrawable>() {
+                                    @Override
+                                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+
+                                        // hide the progress bar
+                                        imageViewProgressBar.setVisibility(View.GONE);
+
+                                        return false;
+                                    }
+                                })
+                                .dontTransform()
+                                .into(imageView);
+                    }
             }
 
             @Override
@@ -121,7 +171,7 @@ public class JobActivity extends AppCompatActivity {
                 dialogBidAmount = (EditText) layout.findViewById(R.id.bidDialogAmount);
 
                 // set the positive button
-                alert.setPositiveButton("Place", new DialogInterface.OnClickListener() {
+                alert.setPositiveButton("Adauga", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // get the values
@@ -142,7 +192,7 @@ public class JobActivity extends AppCompatActivity {
                 });
 
                 // set the negative button
-                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                alert.setNegativeButton("Anuleaza", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();

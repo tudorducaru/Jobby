@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="8dp"
-        android:text="Rating count : 10" />
+        android:text="Nr. de rating-uri : 10" />
 
     <TextView
         android:id="@+id/bidderProfileJobsCompletedTextView"
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="8dp"
-        android:text="Jobs completed : 43" />
+        android:text="Lucrari executate : 43" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -83,13 +83,13 @@
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
         android:backgroundTint="@color/colorSecondary"
-        android:text="Rate" />
+        android:text="Evalueaza" />
 
     <Button
         android:layout_marginTop="4dp"
         android:backgroundTint="#43a047"
         android:id="@+id/acceptBidButton"
-        android:text="Accept bid"
+        android:text="Accepta oferta"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
         android:layout_width="match_parent"

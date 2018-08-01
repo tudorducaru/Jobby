@@ -102,6 +102,9 @@ public class MyBids extends AppCompatActivity {
                 intent.putExtra("name", bidderName);
                 intent.putExtra("id", bidderId);
 
+                // put the key of the job in the intent
+                intent.putExtra("key", key);
+
                 // start the activity
                 startActivity(intent);
             }

@@ -9,7 +9,8 @@ public class User {
     private String mProfilePicUrl;
     private String mEmail;
     private String mAddress;
-    private int mPhoneNumber;
+    private String mPhoneNumber;
+    private String mToken;
 
     // empty constructor
     public User(){
@@ -17,7 +18,7 @@ public class User {
     }
 
     // the constructor
-    public User(double rating, int ratingCount, int jobsCompleted, String profilePicUrl, String email, String address, int phoneNumber){
+    public User(double rating, int ratingCount, int jobsCompleted, String profilePicUrl, String email, String address, String phoneNumber, String token){
 
         // asign the parameters to the variables
         mRating = rating;
@@ -27,6 +28,7 @@ public class User {
         mEmail = email;
         mAddress = address;
         mPhoneNumber = phoneNumber;
+        mToken = token;
 
     }
 
@@ -59,7 +61,17 @@ public class User {
         return mAddress;
     }
 
-    public int getmPhoneNumber() {
+    public String getmPhoneNumber() {
         return mPhoneNumber;
+    }
+
+    public String getmToken() {
+        return mToken;
+    }
+
+
+
+    public void setmToken(String mToken) {
+        this.mToken = mToken;
     }
 }
