@@ -250,8 +250,8 @@ public class AddAJob extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         progressBar.bringToFront();
 
-        // if bitmap is null, don't load image
-        if(loadedPictureImageView.getVisibility() == View.INVISIBLE){
+        // if image not loaded, don't load image
+        if(imageUri == null){
 
             // add job info without url
             addJobInfo("");
